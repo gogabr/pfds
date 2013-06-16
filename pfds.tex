@@ -5,6 +5,8 @@
 \usepackage{amssymb}
 \usepackage{listings}
 
+\usepackage[arrow,curve,matrix,frame]{xy}
+
 \lstset{language=ml,mathescape=true}
 
 \newcommand{\term}[2]{\textit{#1} (#2)}
@@ -15,6 +17,9 @@
 \newtheorem{exercise}{\textbf{Упражнение}}[chapter]
 
 \newtheorem{hint}{\textbf{Указание разработчикам}}[chapter]
+
+\newtheorem{theorem}{\textbf{Теорема}}[chapter]
+\newtheorem{lemma}[theorem]{\textbf{Лемма}}
 
 \author{Крис Окасаки}
 \title{Чисто функциональные структуры данных}
@@ -29,5 +34,6 @@
 \input{chapter03.tex}
 \input{chapter04.tex}
 \input{chapter05.tex}
+\input{chapter06.tex}
 
 \end{document}
