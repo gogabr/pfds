@@ -9,6 +9,13 @@
 
 \lstset{language=ml,mathescape=true}
 
+\makeatletter
+\newcommand{\translationnotemark}{{\renewcommand{\@makefnmark}{\mbox{$^*$}}\footnotemark{}}}
+\newcommand{\translationnotetext}[1]{{\renewcommand{\@makefnmark}{\mbox{$^*$}}\footnotetext{#1  --- {\it прим. перев.}}}\addtocounter{footnote}{-1}}
+\newcommand{\translationnote}[1]{\translationnotemark{}\translationnotetext{#1}}
+\makeatother
+
+
 \newcommand{\term}[2]{\textit{#1} (#2)}
 
 \newcommand{\concat}{\ensuremath{+\!\!\!+\,}}
@@ -41,5 +48,6 @@
 \input{chapter08.tex}
 \input{chapter09.tex}
 \input{chapter10.tex}
+\input{chapter11.tex}
 
 \end{document}
