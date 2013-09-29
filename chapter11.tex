@@ -1,6 +1,110 @@
 \chapter{Неявное рекурсивное замедление}
 \label{ch:11}
 
+В Разделе~\ref{sc:9.2.3} мы видели, что избыточное ленивое
+представление двоичных чисел может поддерживать как функцию
+увеличения, так и уменьшения за амортизированное время $O(1)$. В
+Разделе~\ref{sc:10.1.2} мы видели, что гетерогенные типы и полиморфная
+рекурсия позволяют строить чрезвычайно простые реализации числовых
+представлений, например, двоичных списков с произвольным доступом. В
+этой главе мы сочетаем и расширяем эти идеи, получая в результате
+методику, называемую \term{неявное рекурсивное замедление}{implicit
+  recursive slowdown}.
+
+Каплан и Тарждан \cite{KaplanTarjan1995, KaplanTarjan1996b,
+  KaplanTarjan1996a} исследовали родственную методику под названием
+\term{рекурсивное замедление}{recursive slowdoen}, основанную, в
+отличие от нашей, не на ленивых двоичных числах, а на сегментированных
+двоичных числах (Раздел~\ref{sc:9.2.4}). Сходства и различия
+реализаций, основанных на рекурсивном замедлении и на неявном
+рекурсивном замедлении, в сущности, аналогичны сходствам и различиям
+между этими двумя системами счисления.
+
+\section{Очереди и деки}
+\label{sc:11.1}
+
+Напомним устройство двоичных списков с произвольным доступом из
+Раздела~\ref{sc:10.1.2}, имеющих тип
+\begin{lstlisting}
+  datatype $\alpha$ RList =
+       Nil | Zero of ($\alpha$ $\times$ $\alpha$ RList | One of $\alpha$ $\times$ ($\alpha$ $\times$ $\alpha$) RList
+\end{lstlisting}
+Чтобы упростить дальнейшее обсуждение, давайте заменим этот тип на
+\begin{lstlisting}
+  datatype $\alpha$ Digit = Zero | One of $\alpha$
+  datatype $\alpha$ RList = Shallow of $\alpha$ Digit | Deep of $\alpha$ Digit $\times$ ($\alpha$ $\times$ $\alpha$) RList
+\end{lstlisting}
+Мелкий (\lstinline!Shallow!) список содержит от нуля до одного
+элемента. Глубокий (\lstinline!Deep!) список содержит ноль или один
+элемент, а также список пар. С этим типом мы можем играть во многие из
+игр, освоенных нами при рассмотрении двоичных списков с произвольным
+доступом в Главе~\ref{ch:9}. Например, можно поддержать функцию
+\lstinline!head! за время $O(1)$, переключившись на безнулевое
+представление вроде
+\begin{lstlisting}
+  datatype $\alpha$ Digit = Zero | One of $\alpha$ | Two of $\alpha$ $\times$ $\alpha$
+  datatype $\alpha$ RList = Shallow of $\alpha$ Digit | Deep of $\alpha$ Digit $\times$ ($\alpha$ $\times$ $\alpha$) RList
+\end{lstlisting}
+В этом представлении все цифре в глубоком (\lstinline!Deep!) узле
+должны быть единицами или двойками. Конструктор ноль-\lstinline!Zero!
+используется только в пустом списке \lstinline!Shallow Zero!.
+
+Подобным образом, задержав список пар в каждом глубоком узле, мы можем
+заставить либо \lstinline!cons!, либо \lstinline!tail! работать за
+амортизированное время $O(1)$, а вторую из этих операций за
+амортизированное время $O(\log n)$.
+\begin{lstlisting}
+  datatype $\alpha$ RList = 
+         Shallow of $\alpha$ Digit
+       | Deep of $\alpha$ Digit $\times$ ($\alpha$ $\times$ $\alpha$) RList susp
+\end{lstlisting}
+Позволив выбирать из трёх ненулевых цифр в каждом глубоком узле, мы
+можем заставить все три функции \lstinline!cons!, \lstinline!head! и
+\lstinline!tail! работать за время $O(1)$.
+\begin{lstlisting}
+  datatype $\alpha$ Digit =
+       Zero | One of $\alpha$ | Two of $\alpha$ $\times$ $\alpha$ | Three of $\alpha$ $\times$ $\alpha$ $\times$ $\alpha$
+\end{lstlisting}
+Как и прежде, конструктор \lstinline!Zero! используется только в
+пустом списке.
+
+Чтобы расширить эту схему для поддержки очередей и деков, достаточно
+добавить вторую цифру в каждый глубокий узел-\lstinline!Deep!.
+\begin{lstlisting}
+  datatype $\alpha$ Queue =
+         Shallow of $\alpha$ Digit
+       | Deep of $\alpha$ Digit $\times$ ($\alpha$ $\times$ $\alpha$) Queue susp $\times$ $\alpha$ Digit
+\end{lstlisting}
+Первая цифра представляет первые несколько элементов очереди, а
+вторая~--- последние несколько элементов. Оставшиеся элементы хранятся
+в задержанной очереди пар, которую мы называем \term{средней
+  очередью}{middle queue}.
+
+Выбор типа цифры зависит от того, какие функции мы хотим поддерживать
+на каждом конце очереди. В следующей таблице приведены разрешенные
+значения для головной цифры очереди, поддерживающей каждое данное
+сочетание функций.
+$$
+\begin{array}{c|c}
+  \mbox{поддерживаемые функции} & \mbox{разрешённые цифры} \\
+  \hline
+  \lstinline!cons! & \lstinline!Zero!, \lstinline!One! \\
+  \lstinline!cons/head! & \lstinline!One!, \lstinline!Two! \\
+  \lstinline!head/tail! & \lstinline!One!, \lstinline!Two! \\
+  \lstinline!cons/head/tail! & \lstinline!One!, \lstinline!Two!, \lstinline!Three! \\
+\end{array}
+$$
+Те же правила выбора относятся и к хвостовой цифре.
+
+В качестве конкретного примера давайте разработаем реализацию
+очередей, поддерживающую \lstinline!snoc! на хвостовом конце и
+\lstinline!head! и \lstinline!tail! на головном (т.~е., обыккновенных
+очередей-FIFO). Обратившись к таблице, мы решаем, что головная цифра
+глубокого узла может быть единица-\lstinline!One! или
+двойка-\lstinline!Two!, а хвостовая цифра может быть
+ноль-\lstinline!Zero! или единица-\lstinline!One!. Цифра в мелком узле
+может быть \lstinline!Zero! или \lstinline!One!.
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "pfds"
