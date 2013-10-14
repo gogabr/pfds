@@ -728,7 +728,7 @@ $\mathtt{(0|1|01^*2)^*}$ либо, если ещё учесть отсутств
     | fixup (Ones i :: Two :: ds) = Ones i :: Zero :: fixup ds
     | fixup ds = ds
 \end{lstlisting}
-Во второй строке \lstinline!ds! мы пользуемся тем, что представление
+Во второй строке \lstinline!fixup! мы пользуемся тем, что представление
 сегментировано, проскакивая блок единиц, за которыми следует
 двойка. Наконец, \lstinline!inc! зовет сначала \lstinline!simpleInc!,
 затем \lstinline!fixup!.
