@@ -350,7 +350,7 @@ $\concat$ равна глубине более мелкого c-дека. Кро
 $\concat$ равно $O(\min (\log n_1, \log n_2))$, где $n_i$~--- длина
 \lstinline!c$_i$!. 
 
-Полный код этой реализации c-деков приведён на Рис.~\ref{fig:11.3}
+Полный код этой реализации c-деков приведён на Рис.~\ref{fig:11.3}.
 
 \begin{figure}
   \centering
@@ -487,8 +487,8 @@ $$
 $$
 Заметим, однако, что в результате комбинации \lstinline!cons! и
 \lstinline!tail! мы просто заменяем первый элемент
-\lstinline!a!. Можно сделать это напрямую, избежав тем самым ненужный
-вызов \lstinline!tail!, с помощью функции \lstinline!replaceHead!.
+\lstinline!a!. Можно сделать это напрямую, избежав тем самым ненужного
+вызова \lstinline!tail!, с помощью функции \lstinline!replaceHead!.
 \begin{lstlisting}
   fun replaceHead (x, Shallow d) = Shallow (D.cons (x, D.tail d))
     | replaceHead (x, Deep (f, a, m, b, r) =
