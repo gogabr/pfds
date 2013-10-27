@@ -1,27 +1,45 @@
 \appendix
 \chapter{Код на языке Haskell}
 \label{app:A}
-
+\lstset{language=Haskell}
 \section{Очереди}
 \input{haskell/Queue.lhs}
-\hrule
+\codesep
 \input{haskell/BatchedQueue.lhs}
-\hrule
+\codesep
 \input{haskell/BankersQueue.lhs}
-\hrule
+\codesep
 \input{haskell/PhysicistsQueue.lhs}
-\hrule
+\codesep
 \input{haskell/HoodMelvilleQueue.lhs}
-\hrule
+\codesep
 \input{haskell/BootstrappedQueue.lhs}
-\hrule
+\codesep
 \input{haskell/ImplicitQueue.lhs}
 
-\section{Двусвязные очереди}
+\section{Двусторонние очереди}
 \input{haskell/Deque.lhs}
-\hrule
+\codesep
 \input{haskell/BankersDeque.lhs}
 
+\section{Списки с конкатенацией}
+\input{haskell/CatenableList.lhs}
+\codesep
+\input{haskell/CatList.lhs}
+
+\section{Двусторонние очереди с конкатенацией}
+\input{haskell/CatenableDeque.lhs}
+\codesep
+\input{haskell/SimpleCatenableDeque.lhs}
+\codesep
+\input{haskell/ImplicitCatenableDeque.lhs}
+
+\section{Списки с произвольным доступом}
+\input{haskell/RandomAccessList.lhs}
+\codesep
+\input{haskell/BinaryRandomAccessList.lhs}
+\codesep
+\input{haskell/SkewBinaryRandomAccessList.lhs}
 
 %%% Local Variables: 
 %%% mode: latex
