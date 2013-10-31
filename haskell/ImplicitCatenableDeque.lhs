@@ -31,7 +31,7 @@ dappendR d1 d2 =
   else dappendR (snoc d1 (head d2)) (tail d2)
 
 replaceHead x (Shallow d) = Shallow (cons x (tail d))
-replaceHead x (Deep f a mb r) = Deep (consx (tail f)) a m b r
+replaceHead x (Deep f a m b r) = Deep (cons x (tail f)) a m b r
 
 instance (Deque d, Sized d) => Deque (ImplicitCatDeque d) where
   empty = Shallow empty
@@ -39,7 +39,7 @@ instance (Deque d, Sized d) => Deque (ImplicitCatDeque d) where
   isEmpty _ = False
 
   cons x (Shallow d) = Shallow (cons x d)
-  cons x (Deep f a m b r) = DEEP (consx f) a m b r
+  cons x (Deep f a m b r) = Deep (cons x f) a m b r
 
   head (Shallow d) = head d
   head (Deep f a m b r) = head f
@@ -70,8 +70,8 @@ instance (Deque d, Sized d) => CatenableDeque (ImplicitCatDeque d) where
     | size d1 < 4 = Shallow (dappendL d1 d2)
     | size d2 < 4 = Shallow (dappendR d1 d2)
     | otherwise = let (f, m, r) = share d1 d2 in Deep f empty m empty r
-  (Shallowd) ++ (Deep f a m b r)
-    | size d1 < 4 = Deep (dappendL d f) a m b r
+  (Shallow d) ++ (Deep f a m b r)
+    | size d < 4 = Deep (dappendL d f) a m b r
     | otherwise = Deep d (cons(Simple f) a) m b r
   (Deep f a m b r) ++ (Shallow d)
     | size d < 4 = Deep f a m b (dappendR r d)

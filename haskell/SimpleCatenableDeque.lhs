@@ -11,7 +11,7 @@ data SimpleCatDeque d a
 tooSmall d = isEmpty d || isEmpty (tail d)
 
 dappendL d1 d2 = if isEmpty d1 then d2 else cons (head d1) d2
-dappendR d2 d2 = if isEmpty d2 then d1 else snoc d1 (head d2)
+dappendR d1 d2 = if isEmpty d2 then d1 else snoc d1 (head d2)
 
 instance Deque d => Deque (SimpleCatDeque d) where
   empty = Shallow empty
@@ -33,9 +33,9 @@ instance Deque d => Deque (SimpleCatDeque d) where
 -- snoc, last, and init defined symmetrically...
 
 instance Deque d => CatenableDeque (SimpleCatDeque d) where
-  (Shallow di) ++ (Shallow d2)
-    | tooSmall d1 = Shallow (dappendL d1 d2 )
-    | tooSmall d2 = Shallow (dappendR d1 d2 )
+  (Shallow d1) ++ (Shallow d2)
+    | tooSmall d1 = Shallow (dappendL d1 d2)
+    | tooSmall d2 = Shallow (dappendR d1 d2)
     | otherwise = Deep d1 empty d2
   (Shallow d) ++ (Deep f m r)
     | tooSmall d = Deep (dappendL d f) m r
@@ -43,6 +43,6 @@ instance Deque d => CatenableDeque (SimpleCatDeque d) where
   (Deep f m r) ++ (Shallow d)
     | tooSmall d = Deep f m (dappendR r d)
     | otherwise = Deep f (snoc m r) d
-  (Deep f1 m1 r1) ++ (DEEP f2 m2 r2) =
-    Deep h (snoc mi r1 ++ cons f2 m2) r2
+  (Deep f1 m1 r1) ++ (Deep f2 m2 r2) =
+    Deep f1 (snoc m1 r1 ++ cons f2 m2) r2
 \end{code}

@@ -1,8 +1,12 @@
 LATEX ?= latex
 PDFLATEX ?= pdflatex
-RM ?= rm -rf
+HC ?= ghc
+
+RM := rm -rf
+MKDIR := mkdir -p
 
 LATEXFLAGS := -interaction=batchmode
+HOUT := out
 
 latex-files := $(wildcard *.tex)
 haskell-files := $(wildcard haskell/*.lhs)
@@ -19,7 +23,7 @@ pfds.pdf: $(latex-files) $(haskell-files)
 	$(call run-twice,$(PDFLATEX) $(LATEXFLAGS) $(main-file))
 
 build-haskell: $(haskell-files)
-	$(HC) $^
+	$(MKDIR) $(HOUT) && $(HC) -outputdir $(HOUT) $^
 
 clean:
-	$(RM) *.log *.aux *.pdf *.dvi haskell/*.hi haskell/*.o
+	$(RM) *.log *.aux *.pdf *.dvi haskell/*.hi haskell/*.o $(HOUT)
