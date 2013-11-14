@@ -1,0 +1,45 @@
+\begin{tikzpicture}[thick,scale=0.5, every node/.style={scale=0.5}]
+    \tikzstyle{marrs}=[very thick,-latex]
+
+    
+    \begin{scope}
+    
+        \foreach \x/\y in {0/0, 0/-2, 3/-2, 6/-2} {
+            \draw (\x - 0.5, \y - 0.5) rectangle +(1, 1); \draw (\x + 1 - 0.5, \y - 0.5) rectangle +(1, 1);
+        }
+        \draw[marrs] (-1.5, 0) -> +(1, 0);
+        \draw[marrs] (0, 0) -> +(0, -1.5);
+        \draw[marrs] (1, -2) -> +(1.5, 0);
+        \draw[marrs] (4, -2) -> +(1.5, 0);
+        \draw[marrs] (1, 0) -- (18.5, 0) .. controls (18.75, 0) and (19, -0.25) .. (19, -0.5) -- (19, -1.5);
+        \draw[marrs] (7, -2) -- +(4.5, 0);
+        
+        { \huge
+            \draw (-2, 0) node {$zs$};
+            \draw (0, -2) node {$0$};
+            \draw (3, -2) node {$1$};
+            \draw (6, -2) node {$2$};
+        }
+    
+    \end{scope}
+    
+    \begin{scope}[xshift=12cm]
+    
+        \foreach \x/\y in {0/-2, 3/-2, 6/-2} {
+            \draw (\x - 0.5, \y - 0.5) rectangle +(1, 1); \draw (\x + 1 - 0.5, \y - 0.5) rectangle +(1, 1);
+        }
+        
+        \draw[marrs] (1, -2) -> +(1.5, 0);
+        \draw[marrs] (4, -2) -> +(1.5, 0);
+        
+        { \huge
+            \draw (0, -2) node {$3$};
+            \draw (3, -2) node {$4$};
+            \draw (6, -2) node {$5$};
+            \draw (7, -2) node {$\cdot$};
+        }
+    \end{scope}
+    
+    
+    
+\end{tikzpicture}

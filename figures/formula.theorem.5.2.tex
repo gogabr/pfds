@@ -1,0 +1,38 @@
+\begin{tikzpicture}[thick,scale=0.5, every node/.style={scale=0.5},grow via three points={%
+one child at (-0.8,-2.3) and two children at (-0.8,-1.8) and (0.8,-1.8)}]
+    \tikzstyle{tblack}=[circle, line width=1mm, draw=black]
+    \tikzstyle{tred}=[circle, draw=black]
+    \def\xstep{7cm}
+    \def\ystep{10cm}
+    
+    \huge
+    
+    \begin{scope}[xshift=0.8cm]
+        \node (x) {$x$}
+            child {node (y) {$y$}
+                child {node {$u$}}
+                child {node {$c$}}
+                node[left of=y, below=-0.6cm] {$t = $}
+            }
+            child {node {$d$}}
+            node[left of=x] {$s = $};
+        
+    \end{scope}
+    
+    \begin{scope}[xshift=4cm]
+        \node at (0, -1.8){$a$};
+        \node at (1, -1.8) {$||$};
+        \node (y) at (3, 0) {$y$}
+            child {node {$b$}}
+            child {node (x) {$x$}
+                child {node {$c$}}
+                child {node {$d$}}
+                node [right of=x, below=-0.6cm] {$ = t'$}
+            }
+            node [right of=y, below=-0.7cm] {$ = s'$};
+    \end{scope}
+    
+    \Huge
+    \draw (2.8, -1.8) node[rotate=0] {$\Rightarrow$};
+    
+\end{tikzpicture}
