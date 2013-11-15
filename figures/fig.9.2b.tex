@@ -1,0 +1,22 @@
+\begin{tikzpicture}[thick,scale=0.5, every node/.style={scale=0.5},grow via three points={%
+one child at (0,-1.7) and two children at (0,-1.7) and (-0.8,-1.7)}
+]
+    \tikzstyle{marrs}=[very thick,-latex]
+    \tikzstyle{tnode}=[circle, fill=black, inner sep=1.5mm]
+    \def\rstep{5cm}
+    
+    \huge
+    
+    \node[tnode] {}
+        child {node[tnode] {} }
+        child {node[tnode] {} 
+            child {node[tnode] {} }
+        }
+        child {node[tnode] {} 
+            child {node[tnode] {} }
+            child {node[tnode] {} 
+                child {node[tnode] {} }
+            }
+        };
+        
+\end{tikzpicture}

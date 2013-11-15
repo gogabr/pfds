@@ -1,0 +1,52 @@
+\begin{tikzpicture}[thick,scale=0.5, every node/.style={scale=0.5},level distance=2cm]
+    
+    \newcommand{\subtrg}[2]{\draw[thick] (#1.center) -- ++(0.6cm, -2cm) -- ++(-1.2cm, 0) -- cycle; \node[yshift=-1.8cm] at (#1.center) {#2}}
+
+    
+    \tikzstyle{tnode}=[circle, fill=black, inner sep=1.5mm]
+    \tikzstyle{tnodes}=[circle, fill=black, inner sep=1.7mm, shift={(1.73cm, -1.73cm)}]
+    \tikzstyle{level 1}=[sibling distance=2.3cm]
+    
+    \huge
+    
+    \begin{scope}
+    
+        \node[tnode] (x) {}
+            child foreach \i in {a, b, c, d} { node[tnode] (\i) {} }
+        ;
+        \foreach \i in {a, b, c, d} {
+            \subtrg{\i}{};
+        }
+        \node[above left] at (x) {$x$};
+        \foreach \i in {a, b} {
+            \node[left=2mm] at (\i) {$\i$};
+        }
+        \foreach \i in {c, d} {
+            \node[right=2mm] at (\i) {$\i$};
+        }
+        \foreach \i in {0, 1, 2, 3} {
+            \node[xshift=\i * 2.3cm, yshift=-2.5cm] at (a) {$t_\i$};
+        }
+    
+    \end{scope}
+
+    \node (rar) at (6cm, -2cm) {$\Longrightarrow$};
+    \node[above=2mm] at (rar) {\texttt{tail}};
+    \begin{scope}[shift={(8cm,2cm)}]
+        \node[tnode] (a) {} 
+            child { node[tnodes] (b) at (a) {}
+                child { node[tnodes] (c) at (b) {}
+                    child { node[tnodes] (d) at (c) {} }
+                }
+            }
+        ;
+        \foreach \i in {a, b, c, d} {
+            \subtrg{\i}{};
+            \node[above right] at (\i) {$\i$};
+        }
+        \foreach \i in {0, 1, 2, 3} {
+            \node[xshift=\i * 1.73cm, yshift=-2.5cm - \i * 1.73cm] at (a) {$t_\i$};
+        }
+    \end{scope}
+            
+\end{tikzpicture}
