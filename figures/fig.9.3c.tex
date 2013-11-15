@@ -6,8 +6,13 @@
     \huge
     
     \def\xstep{1.3}
-    \node[tnode] (l) at (0,1.5) {};
-    \node[tnode] (r) at (2 * \xstep,1.5) {};
+    \node[tnode] at (0, 1.5 + 1.3) {} child {
+      node[tnode] (l) {}
+    };
+    \node[tnode] at (2 * \xstep, 1.5 + 1.3) {} child {
+      node[tnode] (r) {}
+    };
+
     \node at (\xstep, 0.4) {$\oplus$};
     \node at (3 * \xstep, 0.4) {$\rightarrow$};
     \node[tnode] (u1) at (5 * \xstep, 1.5 + 1.3 * 2) {} 
