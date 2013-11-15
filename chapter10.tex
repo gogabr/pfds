@@ -702,7 +702,7 @@ $$
 
 \begin{figure}
   \centering
-  
+  \input{figures/fig.10.4.tex}
   \caption{Дерево, представляющее список $a \ldots t$.}
   \label{fig:10.4}
 \end{figure}
@@ -753,7 +753,7 @@ $$
 
 \begin{figure}
   \centering
-  
+  \input{figures/fig.10.5.tex}
   \caption{Операция \lstinline!tail!.}
   \label{fig:10.5}
 \end{figure}
@@ -1170,17 +1170,20 @@ $i$. Этот инвариант называется \term{лево-линей�
 дугам, помеченным символами строки по порядку.  Например, префиксное
 дерево, представляющее строки \lstinline!"cat"!, \lstinline!"dog"!,
 \lstinline!"car"! и \lstinline!"cart"!, можно изобразить как
-$$
-\begin{xy}
-  \xymatrix{
-    & & \bullet \ar@{-}[dl]_{\mathtt{c}} \ar@{-}[dr]^{\mathtt{d}} & \\
-    & \bullet \ar@{-}[d]_{\mathtt{a}} & & \bullet \ar@{-}[d]^{\mathtt{o}} \\
-    & \bullet \ar@{-}[dl]_{\mathtt{r}} \ar@{-}[dr]^{\mathtt{t}} & & \bullet \ar@{-}[d]^{\mathtt{g}} \\
-    \bullet \ar@{-}[d]_{\mathtt{t}} & & \bullet & \bullet \\
-    \bullet \\
-  }
-\end{xy}
-$$
+\begin{center}
+  \input{figures/fig.10.trie.tex}
+\end{center}
+%$$
+%\begin{xy}
+%  \xymatrix{
+%    & & \bullet \ar@{-}[dl]_{\mathtt{c}} \ar@{-}[dr]^{\mathtt{d}} & \\
+%    & \bullet \ar@{-}[d]_{\mathtt{a}} & & \bullet \ar@{-}[d]^{\mathtt{o}} \\
+%    & \bullet \ar@{-}[dl]_{\mathtt{r}} \ar@{-}[dr]^{\mathtt{t}} & & \bullet \ar@{-}[d]^{\mathtt{g}} \\
+%    \bullet \ar@{-}[d]_{\mathtt{t}} & & \bullet & \bullet \\
+%    \bullet \\
+%  }
+%\end{xy}
+%$$
 Заметим, что при вставке строки в префиксное дерево в него также
 попадают все префиксы этой строки. Только некоторые из этих префиксов
 будут соответствовать реальным записям.  В нашем примере префиксами
