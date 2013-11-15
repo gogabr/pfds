@@ -1,0 +1,42 @@
+\begin{tikzpicture}[thick,scale=0.5, every node/.style={scale=0.5},level distance=1.3cm]
+    \tikzstyle{marrs}=[very thick,-latex]
+    \tikzstyle{tnode}=[circle, fill=black, inner sep=1.5mm]
+    \tikzstyle{tempty}=[inner sep=0mm, line width=0mm, draw=black, circle,fill=black]
+    \def\rstep{5cm}
+    
+    \huge   
+    
+    \tikzstyle{level 1}=[sibling distance = 4cm];
+    \tikzstyle{level 2}=[sibling distance = 2cm];
+    \tikzstyle{level 3}=[sibling distance = 1cm];
+    
+    \node[tnode] at (0, 0) {};
+    \node at (1, 0) {\bf ,};
+    {
+        \tikzstyle{level 1}=[sibling distance = 1cm];
+        \node[tempty] at (2.5, 1.3) {} 
+            child foreach \x in {1,2} { node[tnode] {} }
+        ;    
+    }
+    \node at (4, 0) {\bf ,};
+    {
+        \tikzstyle{level 1}=[sibling distance = 2cm];
+        \tikzstyle{level 2}=[sibling distance = 1cm];
+        \node[tempty] at (6.5, 2.6) {} 
+            child foreach \x in {1,2} { 
+                child foreach \x in {1,2} { 
+                    node[tnode] {}
+                }
+            }
+        ;    
+    }
+    \newcommand{\noop}{}
+    \foreach \x/\v in {0/0, 1/\noop, 2/1, 3/2, 4/\noop, 5/3, 6/4, 7/5, 8/6} {
+        \node at (\x, -0.7) {$\v$};
+    }
+
+    \draw[very thick] (-0.8, -0.2) -- ++(-0.2, 0) -- ++(0, 3.2) -- ++(0.2, 0);
+    \draw[very thick] (8.8, -0.2) -- ++(0.2, 0) -- ++(0, 3.2) -- ++(-0.2, 0);
+    
+            
+\end{tikzpicture}

@@ -457,7 +457,7 @@ $\lfloor d/2 \rfloor + 1$. Разумеется, мы не всегда може
 
 \begin{figure}
   \centering
-  
+  \input{figures/fig.5.4.tex}
   \caption{Вызов функции \lstinline!bigger! с граничным элементом 0.}
   \label{fig:5.4}
 \end{figure}
@@ -577,15 +577,10 @@ $$
 
   Для случая зиг-зиг предположим, что исходное и результирующее дерево
   имеют формы
-$$
-\begin{xy}
-  \xymatrix@C=0.5em@R=2ex{
-    & s & = & x \ar@{-}[dl]\ar@{-}[dr] & & & & & & & & y \ar@{-}[dl]\ar@{-}[dr] & = & s'\\
-    t & = & y \ar@{-}[dl]\ar@{-}[dr] & & d & & \Rightarrow & & a & || & b & & x \ar@{-}[dl]\ar@{-}[dr] & = & t' \\
-    & u & & c & & & & & & & & c &  & d \\
-  }
-\end{xy}
-$$
+
+\begin{center}
+  \input{figures/formula.theorem.5.2.tex}
+\end{center}
 где $a$ и $b$ являются результатами вызова \lstinline!partition (pivot, u)!. Тогда
 $$
 \begin{array}{ll}

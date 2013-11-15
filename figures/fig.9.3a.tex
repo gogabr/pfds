@@ -1,0 +1,26 @@
+
+\begin{tikzpicture}[thick,scale=0.5, every node/.style={scale=0.5},level distance=1.3cm]
+    
+    \newcommand{\subtrg}[2]{\draw[thick] (#1.center) -- ++(0.85cm, -2.2cm) -- ++(-1.7cm, 0) -- cycle; \node[yshift=-1.8cm] at (#1.center) {#2}}
+
+    
+    \tikzstyle{tnode}=[circle, fill=black, inner sep=1.5mm]
+    \tikzstyle{level 1}=[sibling distance=2.3cm]
+    
+    \huge
+    
+    \def\xstep{1.3}
+    \coordinate (l) at (0,1.5) {};
+    \coordinate (r) at (2 * \xstep,1.5) {};
+    \node at (1 * \xstep, 0.4) {$\oplus$};
+    \node at (3 * \xstep, 0.4) {$\rightarrow$};
+    \coordinate (u) at (5 * \xstep, 2.8)
+        child { coordinate (ul) }
+        child { coordinate (ur) };
+    
+    \subtrg{l}{$r$};
+    \subtrg{r}{$r$};
+    \subtrg{ul}{$r$};
+    \subtrg{ur}{$r$};
+            
+\end{tikzpicture}

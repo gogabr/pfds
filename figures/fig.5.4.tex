@@ -1,0 +1,37 @@
+\begin{tikzpicture}[thick,scale=0.5, every node/.style={scale=0.5},grow via three points={%
+one child at (-0.5,-1.8) and two children at (-0.5,-1.8) and (0.5,-1.8)}]
+    \tikzstyle{tblack}=[circle, line width=1mm, draw=black]
+    \tikzstyle{tred}=[circle, draw=black]
+    \def\xstep{7cm}
+    \def\ystep{10cm}
+    
+    \huge
+    
+    \begin{scope}
+        \node {7}
+        child { node {6}
+        child { node {5}
+        child { node {4}
+        child { node {3}
+        child { node {2}
+        child { node {1}
+        }}}}}}
+        ;
+    \end{scope}
+    
+    \begin{scope}[xshift=5cm]
+        \node {6}
+        child { node {4}
+            child { node {2}
+                child { node {1} } 
+                child { node {3} } 
+            }
+            child { node {5} }
+        }
+        child { node {7} };
+    \end{scope}
+    
+    \Huge
+    \draw (1.5, -3.6) node[rotate=0] {$\Rightarrow$};
+    
+\end{tikzpicture}

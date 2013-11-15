@@ -1,0 +1,35 @@
+\begin{tikzpicture}[thick,scale=0.5, every node/.style={scale=0.5},level distance=3cm]
+    \tikzstyle{marrs}=[very thick,-latex]
+    \tikzstyle{tnode}=[circle, draw=black,node distance=1.7cm]
+    \tikzstyle{level 1}=[sibling distance=5.6cm]
+    \tikzstyle{level 2}=[sibling distance=3.4cm]
+    
+    \huge
+
+    \draw (0, 2.5) node {$xs$};
+    \draw[marrs] (0, 2) -- +(0, -1.3);
+    
+    \draw (1.7, 2.5) node {$ys$};
+    \draw[marrs] (1.7, 2) -- +(0, -1.3);
+    
+    \node[tnode] (n_d) {d}
+    child {node[tnode] (n_b) {b}
+        child {node[tnode] (n_a) {a}}
+        child {node[tnode] (n_c) {c}}
+    }
+    child {node[tnode] (n_g) {g}
+        child {node[tnode] (n_f) {f}
+        node[tnode] (n_f') [right of=n_f] {f} [clockwise from=250]
+        child {node[tnode] (n_e) {e}}
+        }
+        child {node[tnode] (n_h) {h}}
+        node[tnode] (n_g') [right of=n_g] {g}
+    }
+    node[tnode] (n_d') [right of=n_d]{d};
+    
+    \path (n_d') edge (n_b);
+    \path (n_d') edge (n_g');
+    \path (n_g') edge (n_f');
+    \path (n_g') edge (n_h);
+    
+\end{tikzpicture}
