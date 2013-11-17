@@ -51,7 +51,7 @@ end
 \end{lstlisting}
 % TODO: Эта херня пихает курсив, когда у меня камлёвые комментарии. Разобраться.
 % \centering
-  
+
 \caption{Сигнатура для стеков.}  \label{fig:2.1}
 \end{figure}
 
@@ -79,7 +79,7 @@ structure CustomStack: Stack = structure
   fun cons (x,s) = Cons (x, s)
   fun head Nil   = raise EMPTY
     | head (Cons(x,s)) = x
-    
+
   fun tail Nil   = raise EMPTY
     | tail (Cons(x,s)) = s
 end
@@ -320,7 +320,7 @@ end
 (см., например, Упражнение~\ref{ex:2.6}), мы упаковываем их в
 структуру с сигнатурой \lstinline!Ordered!.
 
-\begin{figure}  
+\begin{figure}
 \begin{lstlisting}
 signature OREDERED = sig
   type T
@@ -329,23 +329,23 @@ signature OREDERED = sig
   val leq : T $\times$ T -> bool
 end
 
-functor UnbalancedSet(Element: ORDERED): SET = struct 
+functor UnbalancedSet(Element: ORDERED): SET = struct
   type Elem = Element.T
   datatype Tree = E | T of Tree $\times$ Elem $\times$ Tree
   type Set = Tree
-  
+
   val empty = E
   fun member (x,E) = false
-    | member (x,T(a,y,b)) = 
+    | member (x,T(a,y,b)) =
        if Element.lt (x,y) then member (x,a)
        else Element.lt (y,x) then member (x,b)
        else true
 
   fun insert (x,E) = T(E,x,E)
-    | insert (x,s as T(a,y,b)) = 
+    | insert (x,s as T(a,y,b)) =
        if Element.lt (x,y) then T(insert (x,a),y,b)
        else Element.lt (y,x) then T(a,y,insert (x,b))
-       else s 
+       else s
 end
 \end{lstlisting}
 
@@ -435,12 +435,10 @@ end
 при реализации двоичных деревьев поиска (в его случае это были
 AVL-деревья).  Для общего метода реализации устойчивых структур данных
 путем копирования затронутых узлов
-Сарнак и Тарджан \cite{SarnakTarjan1986a} 
-\footnote{Охренеть, автоперевод? Тарьян же? Роберт } 
-выбрали термин
+Сарнак и Тарьян \cite{SarnakTarjan1986a} выбрали термин
 \term{копирование путей}{path copying}. Существуют также другие методы
 реализации устойчивых структур данных, предложенные Дрисколлом,
-Сарнаком, Слитором и Тарджаном \cite{Driscoll-etal1989} и Дитцем
+Сарнаком, Слитором и Тарьяном \cite{Driscoll-etal1989} и Дитцем
 \cite{Dietz1989}, но эти методы не являются чисто функциональными.
 
 %%% Local Variables:
