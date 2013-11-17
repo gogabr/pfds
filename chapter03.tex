@@ -28,10 +28,22 @@
 терминов. На Рис.~\ref{fig:3.1} приведена простая сигнатура для кучи.
 
 \begin{figure}
-  \centering
-  
-  \caption{Сигнатура для кучи (очереди с приоритетами).}
-  \label{fig:3.1}
+\begin{lstlisting}
+signature HEAD = sig
+  structure Elem: ORDERED
+  type Heap
+
+  val empty     : Heap
+  val isEmpty   : Heap $\rightarrow$ bool
+  val insert    : Elem.T $\times$ Heap $\rightarrow$ Heap
+  val merge     : Heap $\times$ Heap $\rightarrow$ Heap
+
+  val findMin   : Heap $\rightarrow$ Elem.T /* raises EMPTY if heap is empty */
+  val deleteMin : Heap $\rightarrow$ Elem.T /* raises EMPTY if heap is empty */
+end
+\end{lstlisting}
+% TODO: understand what is wrong with comments
+\caption{Сигнатура для кучи (очереди с приоритетами).} \label{fig:3.1}
 \end{figure}
 
 \begin{remark}
@@ -125,8 +137,36 @@
 \end{remark}
 
 \begin{figure}
-  \centering
-  
+\begin{lstlisting}
+functor LeftistHeap(Element: ORDERED) : Heap = struct
+  structure Elem = Element
+
+  datatype Heap = E | T of int $\times$ Elem.T $\times$ Heap $\times$ Heap
+
+  fun rank E = 0
+    | rank (T(r,_,_,_)) = r
+  fun makeT (x,a,b) = if rank a $\geq$ rank b then T(rank b+1, x,a,b)
+                       else T(rank a + 1, x,b,a)
+
+  val empty = E
+  fun isEmpty E = true
+    | isEmpty _ = false
+
+  fun merge (h,E) = h
+    | merge (E,h) = h
+    | merge ($h_1$ as T(_,x,$a_1$,$b_1$), h_2 as T(_,y,$a_2$,$b_2$)) =
+       if Elem.leq (x,y) then makeT(x,$a_1$, merge($b_1$,$h_2$)
+       else makeT(y,$a_2$,merge($h_1$,$b_2$))
+
+  fun insert (x,h) = merge (T(1,x,E,E),h)
+  fun findMin E = raise EMPTY
+    | findMin (T(_,x,a,b)) = x
+  fun deleteMin E = raise EMPTY
+    | deleteMin (T(_,x,a,b)) = merge(a,b)
+end
+\end{lstlisting}
+
+
   \caption{Левоориентированные кучи.}
   \label{fig:3.2}
 \end{figure}
@@ -165,7 +205,7 @@
     \lstinline!merge! для левоориентированных куч со сдвинутым весом
     так, чтобы она работала за один проход сверху вниз.
   \item Каковы преимущества однопроходной версии \lstinline!merge! в
-    условиях ленивого вычисления? В условиях параллельного вычисления? 
+    условиях ленивого вычисления? В условиях параллельного вычисления?
   \end{enumerate}
 \end{exercise}
 
@@ -274,11 +314,11 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
 это дерево, так и список оставшихся деревьев.
 \begin{lstlisting}
   fun removeMinTree [t] = (t, [])
-    | removeMinTree (t :: ts) = 
+    | removeMinTree (t :: ts) =
         let val (t', ts') = removeMinTree ts
         in if Elem.leq (root t, root t') then (t, ts) else (t', t :: ts') end
 \end{lstlisting}
-\lstinline!findMin! просто возвращает корень найденного дерева
+Функция \lstinline!findMin! просто возвращает корень найденного дерева
 \begin{lstlisting}
   fun findMin ts = let val (t, _) = removeMinTree ts in root t end
 \end{lstlisting}
@@ -299,8 +339,50 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
 требуют $O(\log n)$ времени.
 
 \begin{figure}
-  \centering
-  
+\begin{lstlisting}
+functor BinomialHeap(Element: ORDERED) : Heap = struct
+  structure Elem = Element
+  datatype Tree = Node of int $\times$ Elem.T $\times$ Tree list
+  datatype Heap = Tree list
+
+  val empty = []
+  val isEmpty ts = null ts
+
+  fun rank (Node(r,x,c)) = r
+  fun root (Node(r,x,c)) = x
+
+  fun link ($t_1$ as Node ($r_1$,$x_1$,$c_1$), $t_2$ as Node ($r_2$,$x_2$,$c_2$)) =
+    if Elem.leq ($x_1$,$x_2$) then Node(r+1, $x_1$, $t_2$::$c_1$)
+    else Node(r+1, $x_2$, $t_1$::$c_2$)
+
+  fun insTree (t,[]) = [t]
+    | insTree (t, ts as t'::ts') =
+       if rank t < rank t' then t::ts else insTree(link(t,t'), ts')
+
+  fun insert (x,ts) = insTree(Node(0,x,[]), ts)
+
+  fun merge ($ts_1$, []) $=$  $ts_1$
+    | merge ([], $ts_2$) $=$  $ts_2$
+    | merge ($ts_1$ as $t_1$::$ts_1'$, $ts_2$ as $t_2$::$ts_2'$) =
+       if rank $t_1$ < rank $t_2$ then $t_1$ :: merge($ts_1$,$ts_2'$)
+       else if rank $t_2$ < rank $t_1$ then $t_2$ :: merge($ts_2$, $ts_1'$)
+       else insTree(link($t_1$,$t_2$), merge($ts_1'$,$ts_2'$)
+
+  fun removeMinTree [] = raise EMPTY
+    | removeMinTree [t] = (t,[])
+    | removeMinTree (t::ts) =
+      let val ($t'$, $ts'$) $=$ removeMinTree ts
+      in if Elem.leq (root t, root t') then (t,ts) else (t', t::ts') end
+
+  fun findMin ts = let val (t,_) = removeMinTree ts in root t end
+
+  fun deleteMin ts =
+    let val (Node(_, x,$ts_1$), $ts_2$) $=$ removeMinTree ts
+    in merge (rev $ts_1$,$ts_2$) end
+end
+\end{lstlisting}
+\centering
+
   \caption{Биномиальные кучи.}
   \label{fig:3.4}
 \end{figure}
@@ -459,9 +541,9 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
   \cite{FahndrichBoyland1997}. С использованием или-образцов можно
   переписать функцию \lstinline!balance! так:
   \begin{lstlisting}
-    fun balance ( (B,T (R,T (R,a,x,b),y,c),z,d) 
-                | (B,T (R,a,x,T (R,b,y,c)),z,d) 
-                | (B,a,x,T (R,T (R,b,y,c),z,d)) 
+    fun balance ( (B,T (R,T (R,a,x,b),y,c),z,d)
+                | (B,T (R,a,x,T (R,b,y,c)),z,d)
+                | (B,a,x,T (R,T (R,b,y,c),z,d))
                 | (B,a,x,T (R,b,y,T (R,c,z,d))) ) = T (R, T (B,a,x,b),T (B,c,z,d))
       | balance body = T body
   \end{lstlisting}
@@ -477,8 +559,39 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
 Реализация красно-чёрных деревьев полностью приведена на Рис.~\ref{fig:3.6}.
 
 \begin{figure}
-  \centering
-  
+\begin{lstlisting}
+functor RedBlackSet(Element: ORDERED) : SET =
+  type Elem = Element.T
+  datatype Color = R | B
+  datatype Tree = E | T of Color $\times$ Tree $\times$ Elem $\times$ Tree
+  type Set = Tree
+
+  val empty = E
+  fun member (x, E) = false
+    | member (x, T (_, a, y, b) =
+       if Element.lt (x,y) then member (x, a)
+       else if Element.lt (y,x) then member (x, b)
+       else true
+
+  fun balance (B,T (R,T (R,a,x,b),y,c),z,d) = T (R, T (B,a,x,b),T (B,c,z,d))
+    | balance (B,T (R,a,x,T (R,b,y,c)),z,d) = T (R, T (B,a,x,b),T (B,c,z,d))
+    | balance (B,a,x,T (R,T (R,b,y,c),z,d)) = T (R, T (B,a,x,b),T (B,c,z,d))
+    | balance (B,a,x,T (R,b,y,T (R,c,z,d))) = T (R, T (B,a,x,b),T (B,c,z,d))
+    | balance body = T body
+
+  fun insert (x, s) =
+        let fun ins E = T (R, E, x, E)
+              | ins (s as T (color, a, y, b)) =
+                  if Element.lt (x,y) then balance (color, ins a, y, b)
+                  else if Element.lt (y,x) then balance (color, a, y, ins b)
+                  else s
+            val T (_, a, y, b) = ins s  /* $\mbox{гарантированно непустое}$ */
+        in T (B, a, y, b)
+end
+\end{lstlisting}
+% TODO: опять курсив там где комменты
+
+
   \caption{Красно-чёрные деревья.}
   \label{fig:3.6}
 \end{figure}
