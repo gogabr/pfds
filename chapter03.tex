@@ -29,7 +29,7 @@
 
 \begin{figure}
   \centering
-  
+
   \caption{Сигнатура для кучи (очереди с приоритетами).}
   \label{fig:3.1}
 \end{figure}
@@ -126,7 +126,7 @@
 
 \begin{figure}
   \centering
-  
+
   \caption{Левоориентированные кучи.}
   \label{fig:3.2}
 \end{figure}
@@ -165,7 +165,7 @@
     \lstinline!merge! для левоориентированных куч со сдвинутым весом
     так, чтобы она работала за один проход сверху вниз.
   \item Каковы преимущества однопроходной версии \lstinline!merge! в
-    условиях ленивого вычисления? В условиях параллельного вычисления? 
+    условиях ленивого вычисления? В условиях параллельного вычисления?
   \end{enumerate}
 \end{exercise}
 
@@ -274,7 +274,7 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
 это дерево, так и список оставшихся деревьев.
 \begin{lstlisting}
   fun removeMinTree [t] = (t, [])
-    | removeMinTree (t :: ts) = 
+    | removeMinTree (t :: ts) =
         let val (t', ts') = removeMinTree ts
         in if Elem.leq (root t, root t') then (t, ts) else (t', t :: ts') end
 \end{lstlisting}
@@ -300,7 +300,7 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
 
 \begin{figure}
   \centering
-  
+
   \caption{Биномиальные кучи.}
   \label{fig:3.4}
 \end{figure}
@@ -459,9 +459,9 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
   \cite{FahndrichBoyland1997}. С использованием или-образцов можно
   переписать функцию \lstinline!balance! так:
   \begin{lstlisting}
-    fun balance ( (B,T (R,T (R,a,x,b),y,c),z,d) 
-                | (B,T (R,a,x,T (R,b,y,c)),z,d) 
-                | (B,a,x,T (R,T (R,b,y,c),z,d)) 
+    fun balance ( (B,T (R,T (R,a,x,b),y,c),z,d)
+                | (B,T (R,a,x,T (R,b,y,c)),z,d)
+                | (B,a,x,T (R,T (R,b,y,c),z,d))
                 | (B,a,x,T (R,b,y,T (R,c,z,d))) ) = T (R, T (B,a,x,b),T (B,c,z,d))
       | balance body = T body
   \end{lstlisting}
@@ -478,7 +478,7 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
 
 \begin{figure}
   \centering
-  
+
   \caption{Красно-чёрные деревья.}
   \label{fig:3.6}
 \end{figure}
@@ -544,9 +544,9 @@ $k$ связываний и $O(k) = O(\log n)$ времени.
 
 Левоориентированные кучи были изобретены Кнутом \cite{Knuth1973a} как
 упрощение структуры данных, введенной Крейном
-\cite{Crane1972}. Вуаллемин \cite{Vuillemin1978} изобрел биномиальные
+\cite{Crane1972}. Виллемин \cite{Vuillemin1978} изобрел биномиальные
 кучи; Браун \cite{Brown1978} исследовал многие свойства этой изящной
-структуры данных. Гуибас и Седжвик \cite{GuibasSedgewick1978}
+структуры данных. Гибас и Седжвик \cite{GuibasSedgewick1978}
 предложили красно-чёрные деревья в качестве обобщающего описания для
 многих других разновидностей сбалансированных деревьев.
 
