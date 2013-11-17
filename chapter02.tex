@@ -39,20 +39,51 @@
 \end{remark}
 
 \begin{figure}
-  \centering
-
-  \caption{Сигнатура для стеков.}
-  \label{fig:2.1}
+\begin{lstlisting}
+signature Stack = sig
+  type $\alpha$ Stack
+  val empty   : $\alpha$ Stack
+  val isEmpty : $\alpha$ Stack $\rightarrow$ bool
+  val cons    : $\alpha \times \alpha$ Stack $\rightarrow$ $\alpha$ Stack
+  val head    : $\alpha$ Stack $\rightarrow \alpha$ Stack /* raises EMPTY if stack is empty */
+  val tail    : $\alpha$ Stack $\rightarrow \alpha$ Stack /* raises EMPTY if stack is empty */
+end
+\end{lstlisting}
+% TODO: Эта херня пихает курсив, когда у меня камлёвые комментарии. Разобраться.
+% \centering
+  
+\caption{Сигнатура для стеков.}  \label{fig:2.1}
 \end{figure}
-\begin{figure}
-  \centering
 
-  \caption{Реализация стека с помощью встроенного типа списков.}
-  \label{fig:2.2}
+
+\begin{figure}
+\begin{lstlisting}
+structure List : Stack = structure
+  type $\alpha$ Stack =  $\alpha$ list
+  val empty = []
+  fun isEmpty s = null s
+  fun cons (x,s) = x::s
+  fun head s     = hd s
+  fun tail s     = tl s
+end
+\end{lstlisting}
+\caption{Реализация стека с помощью встроенного типа списков.}\label{fig:2.2}
 \end{figure}
-\begin{figure}
-  \centering
 
+\begin{figure}
+\begin{lstlisting}
+structure CustomStack: Stack = structure
+  datatype $\alpha$ Stack = Nil | Cons of $\alpha \times \alpha$ Stack
+  val empty = Nil
+  fun isEmpty Nil = true | isEmpty _ = false
+  fun cons (x,s) = Cons (x, s)
+  fun head Nil   = raise EMPTY
+    | head (Cons(x,s)) = x
+    
+  fun tail Nil   = raise EMPTY
+    | tail (Cons(x,s)) = s
+end
+\end{lstlisting}
   \caption{Реализация стека в виде отдельного типа.}
   \label{fig:2.3}
 \end{figure}
@@ -215,8 +246,15 @@ $i$-й по порядку элемент), если добавить в кон�
 например, для удаления элемента или перечисления всех элементов.
 
 \begin{figure}
-  \centering
-
+\begin{lstlisting}
+signature SET = sig
+  type Elem
+  type Set
+  val empty : Set
+  val insert : Elem $\times$ Set -> Set
+  val member : Elem $\times$ Set -> bool
+end
+\end{lstlisting}
   \caption{Сигнатура для множеств.}
   \label{fig:2.7}
 \end{figure}
@@ -282,8 +320,35 @@ $i$-й по порядку элемент), если добавить в кон�
 (см., например, Упражнение~\ref{ex:2.6}), мы упаковываем их в
 структуру с сигнатурой \lstinline!Ordered!.
 
-\begin{figure}
-  \centering
+\begin{figure}  
+\begin{lstlisting}
+signature OREDERED = sig
+  type T
+  val eq  : T $\times$ T -> bool
+  val lt  : T $\times$ T -> bool
+  val leq : T $\times$ T -> bool
+end
+
+functor UnbalancedSet(Element: ORDERED): SET = struct 
+  type Elem = Element.T
+  datatype Tree = E | T of Tree $\times$ Elem $\times$ Tree
+  type Set = Tree
+  
+  val empty = E
+  fun member (x,E) = false
+    | member (x,T(a,y,b)) = 
+       if Element.lt (x,y) then member (x,a)
+       else Element.lt (y,x) then member (x,b)
+       else true
+
+  fun insert (x,E) = T(E,x,E)
+    | insert (x,s as T(a,y,b)) = 
+       if Element.lt (x,y) then T(insert (x,a),y,b)
+       else Element.lt (y,x) then T(a,y,insert (x,b))
+       else s 
+end
+\end{lstlisting}
+
   (* Полностью упорядоченный тип и его функции сравнения *)
   \caption{Реализация двоичных деревьев поиска в виде функтора на Стандартном ML.}
   \label{fig:2.9}
@@ -350,10 +415,15 @@ $d+1$ сравнений, сохраняя элемент, который \emph{
 \end{exercise}
 
 \begin{figure}
-  \centering
-
-  (* Если ключ не найден, возбудить \lstinline!NotFound! *)
-
+\begin{lstlisting}
+signature FINITEMAP = sig
+  type Key
+  type $\alpha$ Map
+  val empty : $\alpha$ Map
+  val bind  : Key $\times$ $\alpha$ $\times$ $\alpha$ Map $\rightarrow \alpha$ Map
+  val lookup: Key $\times$ $\alpha$ Map $\rightarrow \alpha$ /* raises NOTFOUND if key is not found */
+end
+\end{lstlisting}
   \caption{Сигнатура для конечных отображений.}
   \label{fig:2.10}
 \end{figure}
@@ -365,7 +435,9 @@ $d+1$ сравнений, сохраняя элемент, который \emph{
 при реализации двоичных деревьев поиска (в его случае это были
 AVL-деревья).  Для общего метода реализации устойчивых структур данных
 путем копирования затронутых узлов
-Сарнак и Тарджан \cite{SarnakTarjan1986a} выбрали термин
+Сарнак и Тарджан \cite{SarnakTarjan1986a} 
+\footnote{Охренеть, автоперевод? Тарьян же? Роберт } 
+выбрали термин
 \term{копирование путей}{path copying}. Существуют также другие методы
 реализации устойчивых структур данных, предложенные Дрисколлом,
 Сарнаком, Слитором и Тарджаном \cite{Driscoll-etal1989} и Дитцем
