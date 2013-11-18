@@ -38,8 +38,8 @@ signature HEAD = sig
   val insert    : Elem.T $\times$ Heap $\rightarrow$ Heap
   val merge     : Heap $\times$ Heap $\rightarrow$ Heap
 
-  val findMin   : Heap $\rightarrow$ Elem.T /* raises EMPTY if heap is empty */
-  val deleteMin : Heap $\rightarrow$ Elem.T /* raises EMPTY if heap is empty */
+  val findMin   : Heap $\rightarrow$ Elem.T /*$\mbox{ возбуждает EMPTY при пустой куче }$*/
+  val deleteMin : Heap $\rightarrow$ Elem.T /*$\mbox{ возбуждает EMPTY при пустой куче }$*/
 end
 \end{lstlisting}
 % TODO: understand what is wrong with comments
