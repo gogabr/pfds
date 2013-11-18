@@ -119,8 +119,8 @@ $\$p$ сопоставляется с задержками типа
 \begin{lstlisting}
   fun plus (x, y) = $\$$case (x, y) of ($\$$m, $\$$n) $\Rightarrow$ m+n
 \end{lstlisting}
-Однако подобные конструкции встречаются достаточно часто, чтобы
-имело смысл ввести для них синтаксический сахар
+Подобные конструкции встречаются достаточно часто, поэтому мы введём
+для них синтаксический сахар
 \begin{lstlisting}
   fun lazy f p = e
 \end{lstlisting}
@@ -169,7 +169,7 @@ $\$$ при оптимизации, поскольку для любого $e$ �
 потоками. Потоки будут использоваться в нескольких структурах данных
 из последующих глав.
 Потоки (известные также как ленивые списки) подобны обыкновенным
-спискам, за исключением того, что каждая их ячейка задерживается. Тип
+спискам, за исключением того, что вычисление каждой их ячейки задерживается. Тип
 потоков выглядит так:
 \begin{lstlisting}
   datatype $\alpha$ StreamCell = Nil | Cons of $\alpha$ $\times$ $\alpha$ Stream
@@ -295,9 +295,41 @@ $n$ элементов потока.
 
 \begin{figure}
   \centering
+\begin{lstlisting}
+signature STREAM = sig
+  datatype $\alpha$ StreamCell $=$ Nil | Cons of $\alpha \times \alpha$ Stream
+  withtype $\alpha$ Stream $=$ $\alpha$ StreamCell susp
 
-  (* конкатенация потоков *)
+  val $\concat$ : $\alpha$ Stream $\times \alpha$ Stream $\rightarrow \alpha$ Stream /*$\mbox{ Конкатенация потоков }$*/
+  val take : int $\times \alpha$ Stream $\rightarrow \alpha$ Stream
+  val drop : int $\times \alpha$ Stream $\rightarrow \alpha$ Stream
+  val reverse : $\alpha$ Stream $\rightarrow \alpha$ Stream
+end
 
+structure Stream: STREAM = struct
+  datatype $\alpha$ StreamCell $=$ Nil | Cons of $\alpha \times \alpha$ Stream
+  withtype $\alpha$ Stream $=$ $\alpha$ StreamCell susp
+
+  fun lazy ($\$$Nil) ++ t = t
+         | ($\$$Cons(x,s)) ++ t $= \$$Cons(x,s++t)
+
+  fun lazy take (0,s) $= \$$Nil
+         | take (n, $\$$Nil) $= \$$Nil
+         | take (n, $\$$Cons(x,s)) $= \$$Cons(x,take(n-1,s))
+
+  fun lazy drop (n, s) =
+        let fun drop' (0, s) = s
+              | drop' (n, $\$$Nil) $= \$$Nil
+              | drop' (n-1, $\$$Cons (x, s)) $=$ drop' (n-1, s)
+        in drop' (n, s) en
+
+  fun lazy reverse s =
+        let fun reverse' ($\$$Nil, r) $=$ r
+              | reverse' ($\$$Cons(x, s), r) $=$ reverse' (s, $\$$Cons(x, r))
+        in reverse' (s, $\$$Nil) end
+end
+\end{lstlisting}
+  \centering
   \caption{Небольшой пакет потоков.}
   \label{fig:4.1}
 \end{figure}
