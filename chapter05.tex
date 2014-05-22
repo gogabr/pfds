@@ -155,10 +155,17 @@ $\Phi(d_j) \ge \Phi(d_0)$, так что, как и требуется, теку
 \begin{figure}
 
   \centering
-
-  (* возбуждает исключение \lstinline!Empty!, если очередь пуста *)
-
-  (* возбуждает исключение \lstinline!Empty!, если очередь пуста *)
+\begin{lstlisting}
+signature QUEUE =
+sig
+  type $\alpha$ Queue
+  val empty : $\alpha$ Queue
+  val isEmpty : $\alpha$ Queue $\to$ bool
+  val snoc : $\alpha$ Queue $\times$ $\alpha$ $\to$ $\alpha$ Queue
+  val head : $\alpha$ Queue $\to$ $\alpha$            /*$\mbox{ возбуждает исключение } Empty, \mbox{ если очередь пуста }$*/
+  val tail : $\alpha$ Queue $\to$ $\alpha$ Queue /*$\mbox{ возбуждает исключение } Empty, \mbox{ если очередь пуста } $*/
+end
+\end{lstlisting}
 
   \caption{Сигнатура для очередей. (Этимологическое замечание:
     \lstinline!snoc! представляет собой перевернутое слово
