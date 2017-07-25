@@ -224,7 +224,7 @@ end
 биномиальными деревьями. Биномиальные деревья индуктивно определяются
 так:
 \begin{itemize}
-\item Биномиальное дерево ранга 1 представляет собой одиночный узел.
+\item Биномиальное дерево ранга 0 представляет собой одиночный узел.
 \item Биномиальное дерево ранга $r+1$ получается путем
   \term{связывания}{linking} двух биномиальных деревьев ранга $r$, так
   что одно из них становится самым левым потомком второго.
@@ -572,10 +572,10 @@ functor RedBlackSet(Element: ORDERED) : SET =
        else if Element.lt (y,x) then member (x, b)
        else true
 
-  fun balance (B,T (R,T (R,a,x,b),y,c),z,d) = T (R, T (B,a,x,b),T (B,c,z,d))
-    | balance (B,T (R,a,x,T (R,b,y,c)),z,d) = T (R, T (B,a,x,b),T (B,c,z,d))
-    | balance (B,a,x,T (R,T (R,b,y,c),z,d)) = T (R, T (B,a,x,b),T (B,c,z,d))
-    | balance (B,a,x,T (R,b,y,T (R,c,z,d))) = T (R, T (B,a,x,b),T (B,c,z,d))
+  fun balance (B,T (R,T (R,a,x,b),y,c),z,d) = T (R, T (B,a,x,b),y,T (B,c,z,d))
+    | balance (B,T (R,a,x,T (R,b,y,c)),z,d) = T (R, T (B,a,x,b),y,T (B,c,z,d))
+    | balance (B,a,x,T (R,T (R,b,y,c),z,d)) = T (R, T (B,a,x,b),y,T (B,c,z,d))
+    | balance (B,a,x,T (R,b,y,T (R,c,z,d))) = T (R, T (B,a,x,b),y,T (B,c,z,d))
     | balance body = T body
 
   fun insert (x, s) =
