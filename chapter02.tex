@@ -45,7 +45,7 @@ signature Stack = sig
   val empty   : $\alpha$ Stack
   val isEmpty : $\alpha$ Stack $\rightarrow$ bool
   val cons    : $\alpha \times \alpha$ Stack $\rightarrow$ $\alpha$ Stack
-  val head    : $\alpha$ Stack $\rightarrow \alpha$ Stack /*$\mbox{ возбуждает EMPTY для пустого стека }$*/
+  val head    : $\alpha$ Stack $\rightarrow \alpha$ /*$\mbox{ возбуждает EMPTY для пустого стека }$*/
   val tail    : $\alpha$ Stack $\rightarrow \alpha$ Stack /*$\mbox{ возбуждает EMPTY для пустого стека }$*/
 end
 \end{lstlisting}
